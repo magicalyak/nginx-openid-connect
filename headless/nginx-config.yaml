@@ -6,12 +6,12 @@ metadata:
 data:
   #external-status-address: 172.16.186.100
   steam-snippets: |
-    resolver coredns.kube-system.svc.k8s.nginx.net valid=5s;
+    resolver kube-dns.kube-system.svc.cluster.local valid=5s;
 
     server {
       listen 0.0.0.0:12345;
       zone_sync;
-      zone_sync_server nginx-ingress-headless.nginx-ingress.svc.k8s.nginx.net:12345 resolve;
+      zone_sync_server nginx-ingress-headless.nginx-ingress.svc.cluster.local:12345 resolve;
     }
   main-snippets: |
     load_module modules/ngx_http_js_module.so;
