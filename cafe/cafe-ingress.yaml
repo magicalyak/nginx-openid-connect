@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cafe-ingress
+  annotations:
+    custom.nginx.org/enable-oidc:  "True"
+    custom.nginx.org/oidc-authz-endpoint: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/auth"
+    custom.nginx.org/oidc-token-endpoint: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/token"
+    custom.nginx.org/oidc-jwt-keyfile: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/certs"
+    custom.nginx.org/oidc-client:  "my-client-id"
+    custom.nginx.org/oidc-client-secret: "my-client-secret"
+    custom.nginx.org/oidc-scopes: "openid+profile+email+offline_access"
+    custom.nginx.org/oidc-logout-redirect: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/logout"
+    custom.nginx.org/oidc-hmac-key:  "ChangeMe"
+spec:
+  tls:
+  - hosts:
+    - cafe.nginx.net
+    secretName: cafe-secret
+  rules:
+  - host: cafe.nginx.net
+    http:
+      paths:
+      - path: /tea
+        backend:
+          serviceName: tea-svc
+          servicePort: 80
+      - path: /coffee
+        backend:
+          serviceName: coffee-svc
+          servicePort: 80
