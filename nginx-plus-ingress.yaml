@@ -24,9 +24,6 @@ spec:
       - name: openid-connect-server-conf
         configMap:
           name: openid-connect.server-conf
-      - name: openid-connect-configuration-conf
-        configMap:
-          name: openid-connect-configuration.conf
       containers:
       - image: magicalyak/nginx-plus:OIDC
         imagePullPolicy: Always
@@ -45,9 +42,6 @@ spec:
         - name: openid-connect-server-conf
           mountPath: /etc/nginx/conf.d/openid_connect.server_conf
           subPath: openid_connect.server_conf
-        - name: openid-connect-configuration-conf
-          mountPath: /etc/nginx/conf.d/openid_connect_configuration.conf
-          subPath: openid_connect_configuration.conf
         securityContext:
           allowPrivilegeEscalation: true
           runAsUser: 101 #nginx
