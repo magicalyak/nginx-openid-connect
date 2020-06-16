@@ -19,16 +19,12 @@ data:
     # configuration for {{.Ingress.Namespace}}/{{.Ingress.Name}}
 
     # Start HTTP OIDC Customization
-
-    {{- if index $.Ingress.Annotations "custom.nginx.org/enable-oidc"}}
-    {{$oidc := index $.Ingress.Annotations "custom.nginx.org/enable-oidc"}}
-    {{- if eq $oidc "True"}}
+    {{if index $.Ingress.Annotations "custom.nginx.org/oidc"}}
     # Custom log format to include the 'sub' claim in the REMOTE_USER field
     log_format main_jwt '$remote_addr - $jwt_claim_sub [$time_local] "$request" $status '
                         '$body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
     
-    {{end}}{{end -}}
-    
+    {{end}}
     # End HTTP OIDC Customization
 
     {{range $upstream := .Upstreams}}
@@ -159,6 +155,7 @@ data:
         {{end -}}
 
         # Start Server OIDC Customization
+        {{if index $.Ingress.Annotations "custom.nginx.org/oidc"}}
         include conf.d/openid_connect.server_conf; # Authorization code flow and Relying Party processing
         error_log /var/log/nginx/error.log debug;  # Reduce severity level as required
         
@@ -178,6 +175,7 @@ data:
         set $oidc_scopes "{{$oidc_scopes}}";
         set $oidc_logout_redirect "{{$oidc_logout_redirect}}";
         set $oidc_hmac_key "{{$oidc_hmac_key}}";
+        {{end}}
         # End Server OIDC Customization
 
         {{range $location := $server.Locations}}
@@ -262,16 +260,14 @@ data:
             {{end}}
 
             # Start Location OIDC Customization
-
-            {{- if index $.Ingress.Annotations "custom.nginx.org/enable-oidc"}}
+            {{if index $.Ingress.Annotations "custom.nginx.org/oidc"}}
             auth_jwt "" token=$session_jwt;
             error_page 401 = @do_oidc_flow;
 
             auth_jwt_key_request /_jwks_uri;
 
             access_log /var/log/nginx/access.log main_jwt;
-            {{end -}}
-
+            {{end}}
             # End Location OIDC Customization
 
             proxy_connect_timeout {{$location.ProxyConnectTimeout}};

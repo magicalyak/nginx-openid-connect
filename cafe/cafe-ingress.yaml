@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: cafe-ingress
   annotations:
-    custom.nginx.org/enable-oidc:  "True"
+    custom.nginx.org/oidc:  "on"
     custom.nginx.org/oidc-authz-endpoint: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/auth"
     custom.nginx.org/oidc-token-endpoint: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/token"
     custom.nginx.org/oidc-jwt-keyfile: "http://127.0.0.1:8080/auth/realms/master/protocol/openid-connect/certs"
