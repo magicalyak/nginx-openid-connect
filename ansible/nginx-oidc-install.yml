@@ -59,15 +59,15 @@
       src: templates/nginx-plus-ingress.yaml.j2
       dest: files/nginx-plus-ingress.yaml
   
-  - name: Create openid-connect.js
+  - name: Create openid_connect.js
     template:
-      src: templates/openid-connect.js.j2
-      dest: files/openid-connect.js
+      src: templates/openid_connect.js.j2
+      dest: files/openid_connect.js
   
-  - name: Create openid-connect.server-conf
+  - name: Create openid_connect.server_conf
     template:
-      src: templates/openid-connect.server-conf.j2
-      dest: files/openid-connect.server-conf
+      src: templates/openid_connect.server_conf.j2
+      dest: files/openid_connect.server_con
 
   - name: Create headless.yaml
     template:
