@@ -51,26 +51,26 @@
   tasks:
   - name: Create nginx-config.yaml
     template:
-      src: template/nginx-config.yaml.j2
-      dest: file/nginx-config.yaml
+      src: templates/nginx-config.yaml.j2
+      dest: files/nginx-config.yaml
 
   - name: Create nginx-plus-ingress.yaml
     template:
-      src: template/nginx-plus-ingress.yaml.j2
-      dest: file/nginx-plus-ingress.yaml
+      src: templates/nginx-plus-ingress.yaml.j2
+      dest: files/nginx-plus-ingress.yaml
   
   - name: Create openid-connect.js
     template:
-      src: template/openid-connect.js.j2
-      dest: file/openid-connect.js
+      src: templates/openid-connect.js.j2
+      dest: files/openid-connect.js
   
   - name: Create openid-connect.server-conf
     template:
-      src: template/openid-connect.server-conf.j2
-      dest: file/openid-connect.server-conf
+      src: templates/openid-connect.server-conf.j2
+      dest: files/openid-connect.server-conf
 
   - name: Create headless.yaml
     template:
-      src: template/headless.yaml.j2
-      dest: file/headless.yaml
-    when: {{ oidc_headless }}
+      src: templates/headless.yaml.j2
+      dest: files/headless.yaml
+    when: oidc_headless
