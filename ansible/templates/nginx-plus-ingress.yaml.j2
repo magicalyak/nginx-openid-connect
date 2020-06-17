@@ -12,9 +12,11 @@ spec:
     metadata:
       labels:
         app: nginx-ingress
-     #annotations:
-       #prometheus.io/scrape: "true"
-       #prometheus.io/port: "9113"
+{% if ingress_prometheus is defined %}
+     annotations:
+       prometheus.io/scrape: "{{ ingress_prometheus['scrape'] }}"
+       prometheus.io/port: "{{ ingress_prometheus['port'] }}"
+{% endif %}
     spec:
       serviceAccountName: nginx-ingress
       volumes:
@@ -25,16 +27,18 @@ spec:
         configMap:
           name: openid-connect.server-conf
       containers:
-      - image: magicalyak/nginx-plus:OIDC
-        imagePullPolicy: Always
+      - image: {{ ingress_imagename }}
+        imagePullPolicy: {{ ingress_pullpolicy | default('Always') }}
         name: nginx-ingress
         ports:
         - name: http
           containerPort: 80
         - name: https
           containerPort: 443
-       #- name: prometheus
-         #containerPort: 9113
+{% if ingress_prometheus is defined %}
+        - name: prometheus
+          containerPort: {{ ingress_prometheus['port'] }}
+{% endif %}
         volumeMounts:
         - name: openid-connect-js
           mountPath: /etc/nginx/conf.d/openid_connect.js
@@ -65,12 +69,15 @@ spec:
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
          #- -v=3 # Enables extensive logging. Useful for troubleshooting.
           - -report-ingress-status
-         # - -external-service=nginx-ingress
-         # - -enable-leader-election
+         #- -external-service=nginx-ingress
+         #- -enable-leader-election
          #- -enable-prometheus-metrics
          #- -global-configuration=$(POD_NAMESPACE)/nginx-configuration
           - -enable-custom-resources
-          - -nginx-status-allow-cidrs=0.0.0.0/0  # This is insecure, try to restrict to smaller subnet
+{% if ingress_allow_cidr is defined %}
+          - -nginx-status-allow-cidrs={{ ingress_allow_cidr }}
+{% endif %}
+{% if ingress_container_pullsecret is defined %}
       imagePullSecrets:
-        - name: regcred
-
+        - name: {{ ingress_container_pullsecret }}
+{% endif %}

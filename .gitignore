@@ -49,6 +49,8 @@ hack/controller-gen-*
 examples/openid-connect
 *.bak
 scratch
+ansible/files/*.*
+ansible/nginx-oidc-install-custom.yml
 
 # Ignore local docs dependencies
 docs-web/.netlify/state.json
