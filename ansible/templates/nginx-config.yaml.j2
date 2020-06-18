@@ -7,10 +7,10 @@ data:
 {% if oidc_external_status_address is defined %}
   external-status-address: {{ oidc_external_status_address }}
 {% endif %}
-  main_snippets: |
+  main-snippets: |
     load_module modules/ngx_http_js_module.so;
 {% if oidc_headless %}
-  stream-snippets:
+  stream-snippets: |
     resolver {{ oidc_kube_dns | default("kube-dns.kube-system.svc.cluster.local") }} valid=5s;
 
     server {
@@ -237,9 +237,9 @@ data:
         {{ '{{' }}end -{{ '}}' }}
 
         {{ '{{' }}if index $.Ingress.Annotations "custom.nginx.org/oidc"{{ '}}' }}
-        include conf.d/openid_connect.server_conf; # Authorization code flow and Relying Party processing
+        include conf.d/openid_connect.server_conf; # Authorization codse flow and Relying Party processing
         
-        {{ '{{' }}- $oidc_errormsg := index $.Ingress.Annotations "custom.nginx.org/oidc-error-message"{{ '}}' }}
+        {{ '{{' }}- $oidc_error_message := index $.Ingress.Annotations "custom.nginx.org/oidc-error-message"{{ '}}' }}
         {{ '{{' }}- if not $oidc_error_message{{ '}}' }}{{ '{{' }}$oidc_error_message = "NGINX / OpenID Connect login failure\n"{{ '}}' }}{{ '{{' }}end{{ '}}' }}
         set $internal_error_message {{ '{{' }}$oidc_error_message{{ '}}' }};
 
@@ -247,11 +247,11 @@ data:
         resolver {{ oidc_resolver }}
         
         {{ '{{' }}- $oidc_subrequest_output_buffer_size := index $.Ingress.Annotations "custom.nginx.org/oidc-subrequest-output-buffer-size"{{ '}}' }}
-        {{ '{{' }}- if not $oidc_subrequest_output_buffer_size{{ '}}' }}{{ '{{' }}$oidc_subrequest_output_buffer_size = 32k{{ '}}' }}{{ '{{' }}end{{ '}}' }}
+        {{ '{{' }}- if not $oidc_subrequest_output_buffer_size{{ '}}' }}{{ '{{' }}$oidc_subrequest_output_buffer_size = "32k"{{ '}}' }}{{ '{{' }}end{{ '}}' }}
         subrequest_output_buffer_size {{ '{{' }}$oidc_subrequest_output_buffer_size{{ '}}' }};  # To fit a complete tokenset response
         
         {{ '{{' }}- $oidc_gunzip := index $.Ingress.Annotations "custom.nginx.org/oidc-gunzip"{{ '}}' }}
-        {{ '{{' }}- if not $oidc_gunzip{{ '}}' }}{{ '{{' }}$oidc_gunzip = on{{ '}}' }}{{ '{{' }}end{{ '}}' }}
+        {{ '{{' }}- if not $oidc_gunzip{{ '}}' }}{{ '{{' }}$oidc_gunzip = "on"{{ '}}' }}{{ '{{' }}end{{ '}}' }}
         gunzip {{ '{{' }}$oidc_gunzip{{ '}}' }};  # Decompress IdP responses if necessary
 
         error_log /var/log/nginx/error.log debug;  # Reduce severity level as required
