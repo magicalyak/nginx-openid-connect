@@ -67,7 +67,7 @@
   - name: Create openid_connect.server_conf
     template:
       src: templates/openid_connect.server_conf.j2
-      dest: files/openid_connect.server_con
+      dest: files/openid_connect.server_conf
 
   - name: Create headless.yaml
     template:
