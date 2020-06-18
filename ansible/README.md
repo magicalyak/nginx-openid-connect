@@ -31,8 +31,8 @@ drwxr-xr-x   7 tom.gamull  staff    224 Jun 17 15:54 ..
 -rw-r--r--   1 tom.gamull  staff    239 Jun 17 15:57 headless.yaml
 -rw-r--r--   1 tom.gamull  staff  18162 Jun 17 15:57 nginx-config.yaml
 -rw-r--r--   1 tom.gamull  staff   2081 Jun 17 15:57 nginx-plus-ingress.yaml
--rw-r--r--   1 tom.gamull  staff  11248 Jun 17 15:57 openid-connect.js
--rw-r--r--   1 tom.gamull  staff   3850 Jun 17 15:57 openid-connect.server-conf
+-rw-r--r--   1 tom.gamull  staff  11248 Jun 17 15:57 openid_connect.js
+-rw-r--r--   1 tom.gamull  staff   3850 Jun 17 15:57 openid_connect.server_conf
 ```
 
 ## Create Kubernetes Ingress Resources
